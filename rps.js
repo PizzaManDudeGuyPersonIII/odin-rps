@@ -4,7 +4,7 @@ let humanScore = 0;
 function getComputerChoice()
 {
     let outcome = Math.floor(Math.random() * 3);
-    console.log(outcome);
+    
     if (outcome === 0)
         return "rock";
     else if (outcome === 1)
@@ -22,6 +22,7 @@ function getHumanChoice()
 function playRound(humanChoice, computerChoice)
 {
     humanChoiceActual = humanChoice.toLowerCase();
+    
     if (computerChoice === "rock")
     {
         if (humanChoiceActual === "paper")
