@@ -1,105 +1,120 @@
 let computerScore = 0;
 let humanScore = 0;
+let counter = 0;
+
+// Selectors
+const container = document.querySelector("#container");
+const rockButton = document.querySelector("#rock");
+const paperButton = document.querySelector("#paper");
+const scissorButton = document.querySelector("#scissors");
+
+// Paragraph element creation
+const declaration = document.createElement("p");
+const scores = document.createElement("p")
+
+// Button 'click' listeners, if clicked, call playRound with their respective throw
+rockButton.addEventListener("click", () => {
+    playRound("rock", getComputerChoice())
+});
+
+paperButton.addEventListener("click", () => {
+    playRound("paper", getComputerChoice())
+});
+
+scissorButton.addEventListener("click", () => {
+    playRound("scissors", getComputerChoice())
+});
 
 function getComputerChoice()
 {
+    // Random value from 0-2
     let outcome = Math.floor(Math.random() * 3);
     
     if (outcome === 0)
         return "rock";
     else if (outcome === 1)
         return "paper";
+    // If its not 0 or 1 then it has to be 2 since that's the max it can generate to
     else 
         return "scissors";
 }
 
-function getHumanChoice()
-{
-    let choice = prompt("Rock, Paper, or Scissors?");
-    return choice;
-}
-
 function playRound(humanChoice, computerChoice)
-{
-    humanChoiceActual = humanChoice.toLowerCase();
-    
+{   
     if (computerChoice === "rock")
     {
-        if (humanChoiceActual === "paper")
+        if (humanChoice === "paper")
         {
             humanScore++;
-            console.log("You win, Paper beats Rock!")
+            declaration.textContent = "You win, Paper beats Rock!";
         }
-        else if (humanChoiceActual === "scissors")
+        else if (humanChoice === "scissors")
         {
             computerScore++;
-            console.log("You lose, Rock beats Scissors!")
+            declaration.textContent = "You lose, Rock beats Scissors!";
         }
         else
-        {
-            console.log("It's a tie, nobody wins!")
-        }
+            declaration.textContent = "It's a tie, nobody wins!";
     }
 
     else if (computerChoice === "paper")
     {
-        if (humanChoiceActual === "scissors")
+        if (humanChoice === "scissors")
         {
             humanScore++;
-            console.log("You win, Scissors beats Paper!")
+            declaration.textContent = "You win, Scissors beats Paper!";
         }
-        else if (humanChoiceActual === "rock")
+        else if (humanChoice === "rock")
         {
             computerScore++;
-            console.log("You lose, Paper beats Rock!")
+            declaration.textContent = "You lose, Paper beats Rock!";
         }
         else
-        {
-            console.log("It's a tie, nobody wins!")
-        }
+            declaration.textContent = "It's a tie, nobody wins!";
     }
 
     else if (computerChoice === "scissors")
     {
-        if (humanChoiceActual === "rock")
+        if (humanChoice === "rock")
         {
             humanScore++;
-            console.log("You win, Rock beats Scissors!")
+            declaration.textContent = "You win, Rock beats Scissors!"
         }
-        else if (humanChoiceActual === "paper")
+        else if (humanChoice === "paper")
         {
             computerScore++;
-            console.log("You lose, Scissors beats Paper!")
+            declaration.textContent = "You lose, Scissors beats Paper!"
         }
         else
-        {
-            console.log("It's a tie, nobody wins!")
-        }
+            declaration.textContent = "It's a tie, nobody wins!"
     }
 
-    console.log(`Your score: ${humanScore}`)
-    console.log(`Computer score: ${computerScore}`)
-}
+    // increment counter after calculation but before endgame check so declaration displays accurately
+    counter++;
+    
+    // Update and Append scores and declaration
+    scores.textContent = `Your score: ${humanScore} | Computer score: ${computerScore}`;  
+    container.appendChild(declaration);
+    container.appendChild(scores);
 
-function playgame()
-{
-    humanScore = 0;
-    computerScore = 0;
-
-    for (i = 0; i < 5; i++)
+    // Check for the winner
+    if (counter === 5)
     {
-        let humanSelection = getHumanChoice();
-        let computerSelection = getComputerChoice();
+        if (humanScore > computerScore)
+            declaration.textContent = "You win, congratulations!";
+        else if (computerScore > humanScore)
+            declaration.textContent = "You lose, better luck next time!";
+        else
+            declaration.textContent = "Its a draw!";
 
-        playRound(humanSelection, computerSelection)
+        // Update scores before resetting score values so the next round resets the score via appendage
+        // Declaration appears after score, so they swap places when the game is over. Unintentional, but looks nice
+        container.appendChild(scores);
+        container.appendChild(declaration);
+
+        // Reset
+        humanScore = 0;
+        computerScore = 0;
+        counter = 0;
     }
-
-    if (humanScore > computerScore)
-        console.log("You win, congratulations!")
-    else if (computerScore > humanScore)
-        console.log("You lose, better luck next time!")
-    else
-        console.log("Its a draw!")
 }
-
-playgame()
